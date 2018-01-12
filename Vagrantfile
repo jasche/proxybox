@@ -37,8 +37,11 @@ Vagrant.configure("2") do |config|
 
      cp /vagrant/001-reverse-proxy.conf /etc/apache2/sites-available/
      a2ensite 001-reverse-proxy.conf
+#     cp /vagrant/002-forward-proxy.conf /etc/apache2/sites-available/
+#     a2ensite 002-forward-proxy.conf
      a2enmod proxy
      a2enmod proxy_http
+#     a2enmod disk_cache
      service apache2 restart
 
   SHELL
