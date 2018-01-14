@@ -21,13 +21,16 @@ Vagrant.configure("2") do |config|
         "--memory", "256",
       ]
       # Display the VirtualBox GUI when booting the machine
-      vb.gui = true
+      vb.gui = false
  
       # Customize the amount of memory on the VM:
       vb.memory = "1024"
     end
 
     proxy.vm.provision "shell", inline: <<-SHELL
+
+       echo 1 > /proc/sys/net/ipv4/ip_forward
+
        apt-get update
        apt-get install -y apache2
 
@@ -36,12 +39,14 @@ Vagrant.configure("2") do |config|
           ln -fs /vagrant/www /var/www
        fi
 
-       cp /vagrant/001-reverse-proxy.conf /etc/apache2/sites-available/
-       a2ensite 001-reverse-proxy.conf
+#       cp /vagrant/001-reverse-proxy.conf /etc/apache2/sites-available/
+#       a2ensite 001-reverse-proxy.conf
        cp /vagrant/002-forward-proxy.conf /etc/apache2/sites-available/
        a2ensite 002-forward-proxy.conf
        a2enmod proxy
        a2enmod proxy_http
+       a2enmod proxy_connect
+       a2enmod authz_host
 #      a2enmod disk_cache
        service apache2 restart
 
@@ -50,11 +55,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "server1" do |server1|
     server1.vm.box = "ubuntu/trusty64"
-    server1.vm.hostname = "proxy.box"
+    server1.vm.hostname = "server1.box"
 
     #server1.vm.network :forwarded_port, guest: 8080, host: 8080
 
-    server1.vm.network :private_network, ip: "192.168.33.4",  virtualbox__intnet: "mynetwork"
+    server1.vm.network :private_network, ip: "192.168.32.4"
 
     server1.vm.provider :virtualbox do |vb|
       vb.customize [
@@ -63,11 +68,18 @@ Vagrant.configure("2") do |config|
         "--memory", "256",
       ]
       # Display the VirtualBox GUI when booting the machine
-      vb.gui = true
+      vb.gui = false
 
       # Customize the amount of memory on the VM:
       vb.memory = "1024"
     end
+
+   server1.vm.provision "shell", inline: <<-SHELL
+
+      route add default gw 192.168.32.3 eth1
+      route del default gw 10.0.2.2
+   
+   SHELL
 
   end
 

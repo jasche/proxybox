@@ -1,1 +1,4 @@
 .vagrant/
+project/node_modules
+project/build
+project/dist
