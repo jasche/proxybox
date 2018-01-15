@@ -14,7 +14,7 @@ describe("Elaborate on forward proxy", () => {
 
         await sleep(5000);
     });
-    fit("Web proxy flow", async () => {
+    it("Web proxy flow", async () => {
         console.log('Hallo');
         request({'url': 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY',
                  'proxy': 'http://localhost:5000' } ,(error, response,body)=>{
@@ -25,7 +25,21 @@ describe("Elaborate on forward proxy", () => {
 
         await sleep(5000);
     });
-   fit("Web proxy flow with auth",  (done) => {
+
+   fit("Web proxy flow", async () => {
+        console.log('Hallo');
+        request({'url': 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY',
+                 'proxy': 'http://foo:bar@localhost:5000' } ,(error, response,body)=>{
+            console.log('bla bla');
+            if(error) { return console.log('error' , error); };
+            console.log('body', body);
+        });
+
+        await sleep(5000);
+    });
+
+
+   it("Web proxy flow with auth",  (done) => {
         setTimeout( ()=> {
             request({'url': 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY',
                      'proxy': 'http://foo:bar@localhost:5000' } ,(error, response,body)=>{
@@ -34,7 +48,7 @@ describe("Elaborate on forward proxy", () => {
                 console.log('body', body);
                 done();
             });
-        }, 9000);
+        }, 90000);
 
     });
 
