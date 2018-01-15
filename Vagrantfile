@@ -32,6 +32,8 @@ Vagrant.configure("2") do |config|
        echo 1 > /proc/sys/net/ipv4/ip_forward
 
        apt-get update
+
+
        apt-get install -y apache2
 
        if ! [ -L /var/www ]; then
@@ -49,6 +51,10 @@ Vagrant.configure("2") do |config|
        a2enmod authz_host
 #      a2enmod disk_cache
        service apache2 restart
+
+	curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+	sudo apt-get install -y nodejs
+#       npm install npm@latest -g
 
     SHELL
   end
