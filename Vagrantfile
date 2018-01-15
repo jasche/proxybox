@@ -35,6 +35,8 @@ Vagrant.configure("2") do |config|
 
 
        apt-get install -y apache2
+       apt-get install apache2-utils
+
 
        if ! [ -L /var/www ]; then
           rm -rf /var/www
@@ -50,11 +52,14 @@ Vagrant.configure("2") do |config|
        a2enmod proxy_connect
        a2enmod authz_host
 #      a2enmod disk_cache
+
+       htpasswd -b -c /etc/apache2/passwords foo bar
        service apache2 restart
 
 	curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 	sudo apt-get install -y nodejs
-#       npm install npm@latest -g
+        npm install npm@latest -g
+        npm install -g typescript
 
     SHELL
   end
