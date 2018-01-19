@@ -26,10 +26,22 @@ describe("Elaborate on forward proxy", () => {
         await sleep(5000);
     });
 
-   fit("Web proxy flow", async () => {
+   it("Web proxy flow", async () => {
         console.log('Hallo');
         request({'url': 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY',
                  'proxy': 'http://foo:bar@localhost:5000' } ,(error, response,body)=>{
+            console.log('bla bla');
+            if(error) { return console.log('error' , error); };
+            console.log('body', body);
+        });
+
+        await sleep(5000);
+    });
+
+   fit("Web proxy flow with auth and defaults", async () => {
+        console.log('Hallo');
+        var r = request.defaults({'proxy': 'http://foo:bar@localhost:5000'});
+        r({'url': 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY' } ,(error, response,body)=>{
             console.log('bla bla');
             if(error) { return console.log('error' , error); };
             console.log('body', body);
